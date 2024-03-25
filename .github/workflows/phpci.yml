@@ -35,14 +35,10 @@ jobs:
           ${{ runner.os }}-php-
 
     - name: get php version
-      run: php --version
-      with:
-          php-version: ${{ matrix.php-versions }}       
+      run: php --version     
 
     - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
-      with:
-          php-version: ${{ matrix.php-versions }}        
+      run: composer install --prefer-dist --no-progress   
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
