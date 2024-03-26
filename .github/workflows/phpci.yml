@@ -2,9 +2,9 @@ name: code check
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "developement" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "developement" ]
   workflow_call:
 
 permissions:
