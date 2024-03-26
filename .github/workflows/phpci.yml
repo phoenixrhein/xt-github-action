@@ -21,8 +21,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-      with:
-        token: ${{ secrets.CI_CHECKOUT_TOKEN }}
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
