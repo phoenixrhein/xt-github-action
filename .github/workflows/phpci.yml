@@ -50,4 +50,4 @@ jobs:
     # Docs: https://getcomposer.org/doc/articles/scripts.md
 
     - name: phpcs check
-      run: composer phpcs
+      run: ./vendor/bin/phpcs --standard=PSR12 app/
