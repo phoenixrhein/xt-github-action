@@ -2,9 +2,9 @@ name: code check
 
 on:
   push:
-    branches: [ "main", "developement" ]
+    branches: [ "main", "develop" ]
   pull_request:
-    branches: [ "main", "developement" ]
+    branches: [ "main", "develop" ]
   workflow_call:
 
 permissions: {}
@@ -21,6 +21,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      with:
+          token: ${{ secrets.REPO_READ_TOKEN }}    
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
