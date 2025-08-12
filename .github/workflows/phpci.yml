@@ -1,10 +1,6 @@
 name: code check
 
 on:
-  push:
-    branches: [ "main", "develop" ]
-  pull_request:
-    branches: [ "main", "develop" ]
   workflow_call:
     secrets:
       REPO_READ_TOKEN:
@@ -14,47 +10,46 @@ permissions: {}
 
 jobs:
   build:
-
     runs-on: ${{ matrix.os }}
     strategy:
-        matrix:
-            os: [ubuntu-latest]
-            php-versions: ['8.2']
-    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.os }}
+      matrix:
+        os: [ubuntu-latest]
+        php-version: ['8.2']
+    name: PHP ${{ matrix.php-version }} Test on ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v3
-      with:
-          token: ${{ secrets.REPO_READ_TOKEN }}    
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.REPO_READ_TOKEN }}
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-          php-version: ${{ matrix.php-versions }}
-          extensions: mbstring, intl, zip    
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, intl, zip
 
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
 
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
 
-    - name: get php version
-      run: php --version     
+      - name: get php version
+        run: php --version
 
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress   
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
 
-    - name: Install PHP_CodeSniffer
-      run: |
-              curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
-              php phpcs.phar --version
+      - name: Install PHP_CodeSniffer
+        run: |
+          curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
+          php phpcs.phar --version
 
-    - name: phpcs check
-      run: php phpcs.phar --standard=PSR12 app/
+      - name: phpcs check
+        run: php phpcs.phar --standard=PSR12 app/
