@@ -1,10 +1,20 @@
 name: code check
 
 on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
   workflow_call:
     secrets:
       REPO_READ_TOKEN:
         required: true
+    inputs:
+      php-version:
+        description: 'PHP Version to use'
+        required: false
+        default: '8.2'
+        type: string
 
 permissions: {}
 
@@ -14,8 +24,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        php-version: ['8.2']
-    name: PHP ${{ matrix.php-version }} Test on ${{ matrix.os }}
+        php-versions: ["${{ inputs.php-version }}"]
+    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v3
@@ -25,7 +35,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-version }}
+          php-version: ${{ matrix.php-versions }}
           extensions: mbstring, intl, zip
 
       - name: Validate composer.json and composer.lock
