@@ -5,6 +5,12 @@ on:
     secrets:
       REPO_READ_TOKEN:
         required: true
+    inputs:
+      php-version:
+        description: 'PHP Version to use'
+        required: false
+        default: '8.2'
+        type: string
 
 permissions: {}
 
@@ -14,7 +20,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        php-version: ['8.2']
+        php-version: ["${{ inputs.php-version }}"]
     name: PHP ${{ matrix.php-version }} Test on ${{ matrix.os }}
 
     steps:
