@@ -32,7 +32,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
-          extensions: mbstring, intl, zip
+          extensions: mbstring, intl, zip, dom, curl, libxml, sqlite3
+          ini-values: memory_limit=1G
 
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
@@ -59,3 +60,11 @@ jobs:
 
       - name: phpcs check
         run: php phpcs.phar --standard=PSR12 app/
+
+      - name: Prepare Laravel for Larastan
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Run PHPStan
+        run: ./vendor/bin/phpstan analyse
